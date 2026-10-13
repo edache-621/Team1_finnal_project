@@ -1,3 +1,4 @@
+
 const mongodb = require("../data/database");
 const ObjectId = require("mongodb").ObjectId;
 
@@ -34,7 +35,6 @@ const requieredMinLenght = (value, field, minLenght) => {
     );
   }
 
-  // these two validators don't return anything, they serve as middleware-like functions.
   return;
 };
 
@@ -49,67 +49,50 @@ const requieredMaxLenght = (value, field, maxLenght) => {
     );
   }
 
-  // these two validators don't return anything, they serve as middleware-like functions.
   return;
 };
 
 const requieredValidAuthorIDCategoryID = (value, field) => {
-  // set the min & max values
   const minLenght = 4;
   const maxLenght = 4;
 
-  // validate against all of the requierements
-  // firsdt check if it's an string, then continue with the validation.
   const item = requiredString(value, field);
   requieredMinLenght(value, field, minLenght);
   requieredMaxLenght(value, field, maxLenght);
 
-  // once the validation is done, return the item
   return item;
 };
 
+// FIX: Validate a four-digit integer year numerically.
 const requieredValidYear = (value, field) => {
-  // set the min & max values
-  const minLenght = 4;
-  const maxLenght = 4;
+  const year = requiredInteger(value, field);
 
-  // validate against all of the requierements
-  // firsdt check if it's an int, then continue with the validation.
-  const item = requiredInteger(value, field);
-  requieredMinLenght(value, field, minLenght);
-  requieredMaxLenght(value, field, maxLenght);
+  if (year < 1000 || year > 9999) {
+    throw createError(400, `${field} must be a four-digit year.`);
+  }
 
-  // once the validation is done, return the item
-  return item;
+  return year;
 };
 
 const requieredValidISBN = (value, field) => {
-  // set the min & max values
   const minLenght = 10;
   const maxLenght = 17;
 
-  // validate against all of the requierements
-  // firsdt check if it's an int, then continue with the validation.
   const item = requiredString(value, field);
   requieredMinLenght(value, field, minLenght);
   requieredMaxLenght(value, field, maxLenght);
 
-  // once the validation is done, return the item
   return item;
 };
 
 const requieredValidSummary = (value, field) => {
-  // set the min & max values
   const minLenght = 30;
   const maxLenght = 700;
 
-  // validate against all of the requierements
-  // firsdt check if it's an int, then continue with the validation.
   const item = requiredString(value, field);
   requieredMinLenght(value, field, minLenght);
   requieredMaxLenght(value, field, maxLenght);
 
-  // once the validation is done, return the item
   return item;
 };
 
@@ -257,3 +240,4 @@ module.exports = {
   updateBook,
   deleteBook,
 };
+
